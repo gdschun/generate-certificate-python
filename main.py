@@ -3,10 +3,20 @@ from PIL import ImageFont, ImageDraw, Image
 import numpy as np
 import pandas as pd
 import os
+import tkinter as tk
+from tkinter import filedialog
 
-def generate_certificate(names, positions,  font_of_name, font_of_rule, image):
-        
-     os.chdir(r"C:\Users\victo\OneDrive\Desktop\certificate-generator\output")
+def select_file(name_of_window):
+
+        filename = filedialog.askopenfilename(title=f"{name_of_window}")
+        return filename
+def select_folder():
+        foldername = filedialog.askdirectory(title="save locatio")
+        return foldername
+
+def generate_certificate(names, positions, font_of_name, image):
+     save_location =select_folder()   
+     os.chdir(rf"{save_location}")
      for n, p in zip(names, positions):
         img_pil = Image.fromarray(image)
         draw = ImageDraw.Draw(img_pil)
@@ -18,17 +28,18 @@ def generate_certificate(names, positions,  font_of_name, font_of_rule, image):
 
         
 
-  
-image = cv2.imread(r"C:\Users\victo\OneDrive\Desktop\certificate-generator\certificate teamplate\mobile.png")
-sheet = pd.read_excel(r"C:\Users\victo\OneDrive\Desktop\certificate_generator_python\excel\mobile bootcamp.xlsx")
+certificate_teamplate_path=select_file("select certificate teamplate")
+image = cv2.imread(rf"{certificate_teamplate_path}")
+Excel_sheet_path=select_file("select Excel sheet")
+sheet = pd.read_excel(rf"{Excel_sheet_path}")
 names = list(sheet["name"])
 positions = list(sheet["position"])
 
 # position_of_name = cv2.selectROI("select name of participant", image)
 # position_of_rule = cv2.selectROI("select rule of participant", image)
 cv2.destroyAllWindows()
+font_path=select_file("select Font")
+font_of_name = ImageFont.truetype(rf"{font_path}", 300)
+# font_of_rule = ImageFont.truetype(r"C:\Users\victo\OneDrive\Desktop\certificate_generator_python\fonts\times new roman.ttf", 20)
 
-font_of_name = ImageFont.truetype(r"C:\Users\victo\OneDrive\Desktop\certificate-generator\fonts\Roboto-Bold.ttf", 300)
-font_of_rule = ImageFont.truetype(r"C:\Users\victo\OneDrive\Desktop\certificate_generator_python\fonts\times new roman.ttf", 20)
-
-generate_certificate(names, positions, font_of_name, font_of_rule, image)
+generate_certificate(names, positions, font_of_name, image)
