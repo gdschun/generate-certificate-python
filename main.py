@@ -26,7 +26,6 @@ def generate_certificate(names, positions, font_of_name, image):
         image_new = np.array(img_pil)
         cv2.imwrite(f"certificate for {n}.png", image_new)
 
-        
 
 certificate_teamplate_path=select_file("select certificate teamplate")
 image = cv2.imread(rf"{certificate_teamplate_path}")
